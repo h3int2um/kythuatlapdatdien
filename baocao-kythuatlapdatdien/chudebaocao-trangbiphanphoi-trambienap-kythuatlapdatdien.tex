@@ -1,0 +1,731 @@
+ \documentclass[20pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[utf8]{vietnam}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{utopia} %font utopia imported
+
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+
+\mode<beamer>{\usetheme{CambridgeUS}}
+
+\usecolortheme{default}
+
+\usepackage{hyperref}
+\hypersetup{pdfpagemode=FullScreen} %mode FullScreen with beamer
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\usepackage{comment}
+
+\makeatletter
+\let\insertuniversity\relax
+\newcommand\universitytitle{TRƯỜNG ĐH}
+
+\let\insertclass\relax
+\newcommand\classtitle{Lớp}
+
+\let\insertcourse\relax
+\newcommand\coursetitle{Môn học}
+
+\mode<all>
+{
+  \newcommand\university[1]{\def\insertuniversity{#1}}
+  
+  \newcommand\class[1]{\def\insertclass{#1}}
+  
+  \newcommand\course[1]{\def\insertcourse{#1}}
+  \titlegraphic{}
+}
+
+\defbeamertemplate*{title page}{supdefault}[1][]
+{
+  \begingroup
+    \centering
+    \ifx\insertuniversity\relax\relax\else
+    \begin{beamercolorbox}[sep=2pt,center,#1]{author}
+      \footnotesize\universitytitle~\insertuniversity
+    \end{beamercolorbox}\fi
+    
+    \vspace{-.15cm}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\Large\inserttitle\par%
+      \ifx\insertsubtitle\@empty\relax%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%     
+    \end{beamercolorbox}%
+    \vskip.5em\par
+
+    \vspace{-.35cm}
+    \ifx\insertcourse\relax\relax\else
+    \begin{beamercolorbox}[sep=6pt,center,#1]{author}
+      \usebeamerfont{author}\small\coursetitle:~\insertcourse
+    \end{beamercolorbox}\fi
+    \vspace{-.35cm}
+    \ifx\insertclass\relax\relax\else
+    \begin{beamercolorbox}[sep=6pt,center,#1]{author}
+      \usebeamerfont{author}\small\classtitle:~\insertclass
+    \end{beamercolorbox}\fi
+
+    \vspace{-.35cm}
+    \begin{beamercolorbox}[sep=6pt,center,#1]{author}
+      \usebeamerfont{author}\small\insertauthor
+    \end{beamercolorbox}
+    %\begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      %\usebeamerfont{institute}\insertinstitute
+    %\end{beamercolorbox}
+    \vspace{-.45cm}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\small\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \endgroup
+  \vfill
+}
+\setbeamertemplate{title page}[supdefault][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]\makeatother
+
+%Title page
+%\title[Trang bị phân phối và TBA]{\emph{Chủ đề báo cáo}\\\textbf{Trang bị phân phối và Trạm biến áp}}
+\title[Trang bị phân phối và TBA]{\emph{Chủ đề báo cáo}\\\textbf{TRANG BỊ PHÂN PHỐI VÀ TRẠM BIẾN ÁP
+}}
+\author[Kỹ thuật lắp đặt điện]{GVHD: Huỳnh Phát Triển \and SVTH: Nhóm 4}
+\course{Kỹ thuật lắp đặt điện}
+\class{Công nghệ, kỹ thuật điện, điện tử}
+\university{KỸ THUẬT -- CÔNG NGHỆ CẦN THƠ}
+\date[Nhóm 4]{\today}
+%\date[Nhóm 1]{Ngày 24 tháng 08 năm 2016}
+
+%\logo{\includegraphics[height=1.3cm]{logo_ctut.pdf}}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Nội dung báo cáo}
+    \justifying
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+\definecolor{doden}{RGB}{204, 0, 0}
+\newcommand{\noibat}[1]{\textcolor{blue}{#1}} % Làm nổi bật text quan trọng.
+\newcommand{\tviet}[2]{#1_{\text{\textit{#2}}}}
+\begin{document}
+%http://tex.stackexchange.com/questions/82794/removing-page-number-from-title-frame-without-changing-the-theme
+\bgroup
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+%    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+    \hspace*{6ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\begin{frame}
+\titlepage
+\end{frame}
+\egroup
+
+\setcounter{framenumber}{0}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Danh sách thành viên
+\begin{frame}{Danh sách thành viên}
+	\vspace{-1cm}
+	\begin{small}
+	\begin{columns}
+		\column{0.6\textwidth}
+		\begin{enumerate}			
+			\item Nguyễn Văn Đình
+			\item Nguyễn Hoàn Hận
+			\item Thi Minh Nhựt
+			\item Phạm Thanh Quý
+			\end{enumerate}
+
+		\column{0.6\textwidth}
+		\begin{enumerate}	% Danh sách tiếp theo
+			\setcounter{enumi}{4}
+			\item Liên Thái Trường
+			\item Lư Anh Tuấn
+			\item Phan Thành Tuấn
+			\item[]
+		\end{enumerate}
+	\end{columns}
+	\end{small}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Nội dung báo cáo
+\begin{frame}	% Trang mục lục
+	\frametitle{Nội dung báo cáo}
+	\tableofcontents
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Phạm vi của chủ đề báo cáo
+\section*{Phạm vi của chủ đề báo cáo}
+
+\begin{frame}{Cấp điện áp}
+	\begin{block}{Tìm hiểu trong phạm vi của cấp điện áp}
+		\begin{itemize}
+			\item \alert{Mạng hạ áp:} đến $1kV$.
+			
+			\item \alert{Mạng trung áp:} $22kV$.
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Trang bị phân phối
+\section{Trang bị PP điện đến cấp điện áp $1kV$}
+\begin{frame}{Trang bị PP đến điện áp $1kV$}
+	\begin{itemize}
+	\justifying
+		\item Quy định chung: phạm vi, yêu cầu.
+		
+		\item Lắp đặt trang bị điện.
+		
+		\item Quy định về Thanh cái, Dây dẫn và Cáp điện.
+		
+		\item Kết cấu của trang bị PP điện.
+		
+		\item Lắp đặt trang bị PP điện: gian điện, gian sản xuất, ngoài trời.
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Quy định chung
+\subsection*{Quy định chung}
+\begin{frame}{Phạm vi áp dụng}
+	\begin{itemize}
+	\justifying
+		\item Điện áp AC: đến $1kV$.
+		
+		\item Điện áp DC: đến $1.5kV$.
+		
+		\item Tủ PP, điều khiển, relay và các đầu ra từ thanh cái: được lắp đặt trong nhà và ngoài trời.		
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung}
+	\begin{itemize}
+	\justifying
+		\item Lựa chọn thiết bị: theo ĐK làm việc bình thường và khi ngắn mạch.
+		
+		\item Các mạch, bảng điện trong tủ PP: ghi nhiệm vụ rõ ràng, cụ thể.
+		
+		\item Bố trí các mạch rõ ràng: mạch AC, mạch DC, cấp điện áp,\ldots có thể phân biệt được.	
+		
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item Vị trí các pha và các cực: bố trí giống nhau. Với tủ PP: phải có chỗ nối đất di động.
+		
+		\item Các bộ phận kim loại: sơn, mạ hoặc phủ lớp chống ăn mòn.
+		
+		\item Nối đất đúng quy định.
+		
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Lắp đặt trang bị điện
+\subsection*{Lắp đặt trang bị điện}
+\begin{frame}{Lắp đặt trang bị điện}
+	\begin{itemize}
+	\justifying
+		\item Cách bố trí: an toàn cho người vận hành, và thiết bị xung quanh.
+		
+		\item Phần động của thiết bị đóng ngắt: không mang điện áp sau khi ngắt điện.
+		
+		\item Ghi rõ vị trí đóng và vị trí ngắt trên thiết bị đóng ngắt.				
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Lắp đặt trang bị điện (tt)}
+	\begin{itemize}
+	\justifying
+		\item Có dự tính khả năng cắt điện cho từng aptomat.
+		
+		\item Với cầu chì đuôi xoáy: dây nguồn nối vào đuôi, dây tải nối vào vỏ cầu chì.
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Thanh cái, dây dẫn, cáp điện
+\subsection*{Thanh cái, dây dẫn, cáp điện}
+\begin{frame}{Thanh cái, dây dẫn, cáp điện}
+\justifying
+	Khoảng cách giữa phần \alert{dẫn điện} \noibat{không bọc cách điện} với phần \alert{không dẫn điện}, \noibat{không bọc cách điện}:
+	\begin{itemize}
+	\justifying
+		\item Nhỏ hơn $20mm$ theo bề mặt cách điện và $12mm$ trong không khí.
+		\item Rào chắn: nhỏ hơn $100mm$ với rào lưới và $40mm$ với rào tấm kín.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Thanh cái, dây dẫn, cáp điện (tt)}
+	\begin{itemize}
+	\justifying
+		\item \alert{Dây dẫn} và \alert{thanh dẫn trần nối đất} có thể \noibat{không cần cách điện}.
+		\item Các mạch điều khiển, đo lường, cách bố trí cáp phải theo yêu cầu quy định.
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Kết cấu của trang bị phân phối
+\subsection*{Kết cấu của trang bị PP}
+\begin{frame}{Kết cấu của trang bị PP}
+	\begin{itemize}
+	\justifying
+		\item \alert{Khung bảng điện} làm bằng \noibat{vật liệu không cháy}, \alert{vỏ và các bộ phận khác} làm bằng vật liệu \noibat{không cháy} hoặc \noibat{khó cháy}.
+		
+		\item \alert{TBPP được bố trí và lắp đặt} sao cho \noibat{không chịu ảnh hưởng} của tác động bên ngoài.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Kết cấu của trang bị PP (tt)}
+	\begin{itemize}
+	\justifying
+		\item \alert{Bảo vệ các thiết bị chống sự phá hủy của môi trường:} độ ẩm, bụi, đặt ngoài trời,\ldots
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Lắp đặt trang bị phân phối trong gian điện
+\subsection*{Lắp đặt TBPP trong gian điện}
+\begin{frame}{TBPP trong gian điện}
+\justifying
+	Quy định về hành lang vận hành:
+	\begin{itemize}
+	\justifying
+		\item Rộng $\geq 0.8m$ và cao $\geq 1.9m$.
+		\item Những chỗ cá biệt: rộng $\geq 0.6m$	
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP trong gian điện (tt)}
+\justifying
+\alert{Bộ phận mang điện}, \noibat{không bọc cách điện, không rào chắn} đến \alert{bộ phận mang điện}, \noibat{không bọc cách điện, có rào chắn}:
+	\begin{itemize}
+	\justifying
+		\item $U < 660V$: $1m$ (tủ bảng dài $7m$) hoặc $1.2m$ (tủ bảng dài hơn $7m$).
+		
+		\item $U \geq 660V$: $1.5m$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP trong gian điện (tt)}
+\justifying
+\noibat{Khoảng cách nhỏ nhất} giữa các \alert{bộ phận mang điện}, \noibat{không bọc cách điện, không rào chắn} đặt ở độ cao $<2.2m$ về 2 phía của lối đi lại:
+	\begin{itemize}
+	\justifying
+		\item $U < 660V$: $1.5m$
+		
+		\item $U \geq 660V$: $2m$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP trong gian điện (tt)}
+	\begin{itemize}
+	\justifying
+		\item Nếu khoảng cách nhỏ hơn: thì phải đặt rào chắn.
+		
+		\item Nếu không đặt rào chắn: đặt ở vị trí cao $ \geq 2.2m$
+		
+		\item Kích thước rào chắn: $\leq 25\times 25 mm^2$, cao $\geq 1.7m$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP trong gian điện (tt)}
+	\begin{itemize}
+	\justifying
+		\item Chiều dài bảng tủ $\geq 7m$: làm 2 lối ra, có thể tự mở từ bên trong.
+		\item Chiều dài $\geq 7m$, chiều rộng $>3m$, không dùng dầu: không cần làm cửa thứ 2.
+		\item Kích thước cửa: chiều rộng $\geq 0.75m$, chiều cao $\geq 1.9m$
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Lắp đặt trang bị phân phối trong gian sản xuất
+\subsection*{Lắp đặt TBPP trong gian sản xuất}
+\begin{frame}{TBPP trong gian sản xuất}
+	\begin{itemize}
+	\justifying
+		\item Đặt rào chắn: cao $\geq 1.7m$. Chỉ có thể tháo rào bằng dụng cụ chuyên dụng.
+		
+		\item Khoảng cách từ \alert{rào} đến \alert{bộ phận mang điện}: $\geq 0.7m$
+		
+		\item Đoạn cuối của dây dẫn nằm gọn trong tủ hoặc thiết bị.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Lắp đặt trang bị phân phối ngoài trời
+\subsection*{Lắp đặt TBPP ngoài trời}
+\begin{frame}{Lắp đặt TBPP ngoài trời}
+	\begin{itemize}
+	\justifying
+		\item Thiết bị \alert{bố trí trên nền phẳng}, cao $\geq 0.3m$ hoặc $\geq 0.5m$ (tủ bảng).
+		\item Có thể \alert{bố trí sấy} đảm bảo hoạt động bình thường cho: thiết bị, relay, khí cụ đo đếm,\ldots
+	\end{itemize}
+\end{frame}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Trạm biến áp
+\section{Trạm biến áp}
+\begin{frame}{Trạm biến áp}
+	\begin{itemize}
+	\justifying
+		\item Quy định chung: phạm vi và yêu cầu.
+		
+		\item TBPP và TBA: ngoài trời, trong nhà.
+		
+		\item Trạm biến áp: phân xưởng, trên cột.
+		\item Bảo vệ chống sét.
+		
+		\item Hệ thống dầu MBA.
+		
+		\item Lắp đặt MBA lực.
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Phạm vi áp dụng
+\subsection*{Phạm vi áp dụng}
+\begin{frame}{Phạm vi áp dụng}
+	\begin{itemize}
+	\justifying
+		\item Điện áp AC: $\geq 1kV$.
+		
+		\item Áp dụng TBA ngoài trời, trong nhà.	
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Yêu cầu chung
+\subsection*{Yêu cầu chung}
+\begin{frame}{Yêu cầu chung}	
+	\begin{itemize}
+	\justifying
+		\item Lựa chọn theo điều kiện làm việc: \alert{bình thường}, \alert{không bình thường}, \alert{khi sửa chữa}.
+		
+		\item Vận chuyển dễ dàng và an toàn.
+		
+		\item Chọn TB điện, phần dẫn điện, cách điện: ĐK \alert{ổn định động} và \alert{ổn định nhiệt}, \alert{khả năng đóng cắt} (máy cắt).
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Yêu cầu chung (tt)}	
+	\begin{itemize}
+	\justifying
+		\item Dao cách ly: chổ cắt nhìn thấy được nhìn thấy bằng mắt thường.
+		
+		\item Máy cắt: phải chỉ rõ vị trí đóng ngắt. \alert{Không sử dụng đèn chỉ trạng thái máy cắt.}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+\justifying
+	Nơi điều khiện xấu, ảnh hưởng TBĐ:
+	\begin{itemize}
+	\justifying
+		\item Tăng cường cách điện.
+			
+		\item Chọn vật liệu chịu được tác động môi trường hoặc sơn bảo vệ.
+			
+		\item Tránh hướng gió tác hại, chống bụi, hơi nước.
+			
+		\item Sơ đồ đơn giản, kiểu kín.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item 	\alert{Thanh dẫn} dùng dây nhôm, nhôm lõi thép, ống hoặc thanh nhôm, hợp kim nhôm, đồng hoặc thanh đồng, hợp kim đồng.
+		
+		\item Có \alert{khóa cơ khí hoặc điện từ có tính liên động} ở các phần tử loại trừ những sự cố vô tình khi thao tác.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item TBPP và TBA trên $1kV$: dùng dao nối đất cố định, không dùng nối đất di động.
+		\item Nên bố trí dao nối đất kết hợp với dao cách ly của máy biến điện áp thanh cái hoặc máy cắt liên lạc .
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+\justifying
+	Chiều cao của rào chắn bảo vệ TBPP và TBA:
+	\begin{itemize}
+	\justifying
+		\item Đặt ngoài trời: $1.8m$
+		\item Đặt trong nhà: $1.9m$
+		\item Có thể dùng thanh chắn: cao $1.2m$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item Thiết bị đo các thông số của dầu: đặt ở vị trí quan sát thuận lợi, an toàn, không cắt điện khi quan sát,\ldots
+		\item Các dây dẫn liên quan đến thiết bị có dầu: chọn \noibat{dây có cách điện chịu dầu}.
+		
+		\item \alert{Thao tác} bằng \noibat{nguồn AC}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item \alert{Các TB điện đặt ngoài trời:} \noibat{sơn màu sáng} để giải nhiệt.
+		
+		\item Hệ thống chiếu sáng: \noibat{phải sử dụng nguồn điện}, đảm bảo vận hành an toàn và thuận tiện.
+		
+		\item Chú ý về \noibat{khả năng vận chuyển TB}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Yêu cầu chung (tt)}
+	\begin{itemize}
+	\justifying
+		\item Rào chắn với TBA đặt ngoài trời: cách $1.8m$ và cao trên $1.8m$
+		\item \alert{Không sử dụng rào chắn}: \noibat{TBA trong nhà}, \noibat{TBA hợp bộ kiểu kín}, \noibat{TBA trên cột}.
+		\item Kết cấu kim loại của trạm: \noibat{chống ăn mòn}.
+	\end{itemize}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Trang bị phân phối và TBA ngoài trời
+\subsection*{Trang bị phân phối và TBA ngoài trời}
+\begin{frame}{Trang bị PP, TBA ngoài trời}
+\justifying
+	Phần Trang bị phân phối và Trạm biến áp ngoài trong tài liệu quy định cho các cấp điện áp cao, ngoài phạm vi báo cáo.
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+% Trang bị phân phối và TBA phân xưởng
+\subsection*{Trang bị phân phối và TBA phân xưởng}
+\begin{frame}{TBPP, TBA phân xưởng}
+	\begin{itemize}
+	\justifying
+		\item \alert{Cho phép} đặt trong môi trường \noibat{nhiều bụi}, \noibat{hóa chất độc hại} nhưng cần thực hiện \alert{các biện pháp an toàn}.
+		
+		\item Khi đặt hở trong gian điện: các phần điện của MBA được che kín, TBPP đặt trong tủ kín và bảo vê.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP, TBA phân xưởng (tt)}
+	TBA phân xưởng trọn bộ:
+	\begin{itemize}
+	\justifying
+		\item Tổng công suất $S \leq 3.2MVA$ (bố trí hở).
+		
+		\item \alert{Khoảng cách giữa các máy biến áp:} \noibat{ngăn bằng rào}, cách nhau $\geq 10m$.
+		\item Một buồng nên đặt một trạm có MBA dầu, $S\leq 6.5MVA$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP, TBA phân xưởng (tt)}
+	\begin{itemize}
+	\justifying
+		\item Dưới MBA và TB có dầu: có hố thu dầu.
+		\item ĐK dùng MC nhiều dầu trong ngăn: số MC $\leq 3$, khối lượng dầu của mỗi MC $\leq 60Kg$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP, TBA phân xưởng (tt)}
+	Hệ thống thông gió:
+	\begin{itemize}
+	\justifying
+		\item MBA làm việc trong \alert{môi trường bình thường:} \noibat{dùng không khí}.
+		\item MBA làm việc trong \alert{môi trường nhiều bụi, chứa chất dẫn điện, ăn mòn:} lấy không khí bên ngoài hoặc phải lọc sạch.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP, TBA phân xưởng (tt)}
+	\begin{itemize}
+	\justifying
+		\item Sàn máy biến áp không thấp hơn sàn phân xưởng.
+		\item Cửa ngăn MBA có dầu và MC nhiều dầu phải có giới hạn chịu lửa $0.6h$
+		\item Bảo vệ TBA chống va chạm khi vận chuyển đồ trong phân xưởng.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP, TBA phân xưởng (tt)}
+	Qui định về lối đi trong TBA:
+	\begin{itemize}
+	\justifying
+		\item Lối đi dọc theo tường: rộng $\geq 1m$.
+		\item Lối đi ĐK: rộng $l_{\text{\textit{xe đẩy}}}$ $+0.6m$ (một dãy) hoặc $+0.8m$ (hai dãy) với đặt trong buồng.
+		\item Chiều cao phòng: $h_{\text{\textit{max TBPP}}} + 0.8m$ đến trần nhà.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Trang bị phân phối và TBA trên cột
+\subsection*{Trang bị phân phối và TBA trên cột}
+\begin{frame}{TBPP và TBA trên cột}
+	\begin{itemize}
+		\justifying
+		\item MBA nối vào mạng điện qua \noibat{cầu chì và dao cách ly hoặc cầu chì tự rơi}.
+		\item Độ cao đặt máy: $\geq 4m$ tính từ mặt đất đến phần dẫn điện.
+		\item Dao cách ly, cầu chì tự rơi, phần tử cao áp còn mang điện: cao $\geq 2.5m$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP và TBA trên cột (tt)}
+	\begin{itemize}
+		\justifying		
+		\item Vị trí đóng ngắt dao cách ly phải thấy rõ ràng.
+		\item Tủ điện hạ áp của MBA được đặt kín trong tủ.
+		\item Bảo vệ dây dẫn điện tránh hư hỏng do tác động cơ khí.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{TBPP và TBA trên cột (tt)}
+	Bố trí TBA cách nhà có bậc chịu lửa:
+	\begin{itemize}
+		\justifying		
+			\item Cách $\geq 3m$: với cấp $I-III$.
+			\item Cách $\geq 5m$: với cấp $IV-V$.
+			\item Nhưng nơi có nguy cơ xe cộ va vào: có biện pháp bảo vệ TBA.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Bảo vệ chống sét
+\subsection*{Bảo vệ chống sét}
+\begin{frame}{Bảo vệ chống sét}
+	\begin{itemize}
+		\justifying
+		\item Bảo vệ \alert{chống sét đánh trực tiếp}.
+		\item Dùng \alert{kim thu sét} hoặc \alert{dây chống sét} bố trí trên kết cấu xây dựng.
+		\item Nếu không lắp được kim thu sét thì dùng cột thu sét độc lập có $R_{\text{\textit{nđ}}} \leq 80\Omega$		
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Bảo vệ chống sét (tt)}
+	\begin{itemize}
+		\item Bố trí CSV tại đầu ra các cuộn của MBA $6-35kV$.
+		\item Có thể nối trực tiếp CSV với các cuộn mà không qua DCL.
+		\item Sử dụng \alert{dây trần} nối CSV và MBA thì chiều dài $\leq 90m$.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Hệ thống dầu
+\subsection*{Hệ thống dầu}
+\begin{frame}{Hệ thống dầu}
+	\begin{itemize}
+	\justifying
+		\item \alert{Tổ chức hệ thống dầu tập trung:} thùng chứa dầu, xử lý dầu, trang bị lọc, tái sinh dầu,\ldots
+		\item TBA \alert{có máy bù đồng bộ:} xây dựng \noibat{2 bể chứa dầu} không phụ thuộc vào số lượng và dung tích của bể dầu cách điện. $\tviet{V}{bể dầu} \geq 110\% \tviet{V}{bể dầu máy bù}$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Hệ thống dầu (tt)}
+	\begin{itemize}
+	\justifying
+		\item \noibat{Không cần đặt} ống dầu cố định đến máy cắt dầu và MBA.
+		\item Sử dụng \noibat{ống dẫn} và \noibat{thùng dầu di động} để xả nạp dầu.		
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Hệ thống dầu (tt)}
+	\begin{itemize}
+	\justifying
+		\item Ở nhà máy công nghiệp lớn, cần có \alert{hệ thống dầu riêng} (nếu lượng dầu lớn).
+		\item \alert{Bể dầu} phải có: \noibat{bộ hô hấp không khí}, \noibat{bộ báo mức dầu}, \noibat{van xả}, \noibat{ống xả}.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+% Lắp đặt máy biến áp lực
+\subsection*{Lắp đặt máy biến áp lực}
+\begin{frame}{Lắp đặt MBA lực}
+	\begin{itemize}
+	\justifying
+		\item Chọn MBA theo khả năng: \alert{quá tải ngắn hạn và lâu dài}.
+		\item Lắp đặt vị trí \alert{dễ quan sát mức dầu}, \alert{dễ tiếp cận relay hơi}.
+		\item \alert{Lắp chống sét van $35kV$ trở xuống} trên nắp và thân MBA.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Lắp đặt MBA lực (tt)}
+	\begin{itemize}
+	\justifying
+		\item \alert{MBA dầu} lắp đặt \noibat{đúng độ nghiêng yêu cầu} để khí đến được relay hơi.
+		\item \alert{Lắp thùng dầu} trên \alert{kết cấu riêng} \noibat{không cản trở lấy MBA} ra khỏi móng. \alert{Relay hơi} bố trí gần MBA để tiếp cận thuận lợi và an toàn trên thang cố định.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Lắp đặt MBA lực (tt)}
+	\begin{itemize}
+	\justifying
+		\item \alert{Ống phòng nổ} \noibat{không hướng gần} MBA.
+		\item \alert{Khởi động thiết bị chữa cháy} bằng  \noibat{2 phương pháp} là \noibat{bằng tay} và \noibat{tự động}.
+		\item Sàn của MBA dầu có độ nghiêng $2\%$ về hố thu dầu.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Lắp đặt MBA lực (tt)}
+	\begin{itemize}
+	\justifying
+		\item MBA có \alert{hệ thống làm mát cưỡng bức} phải \noibat{tự khởi động được} và \noibat{tự dừng được hệ thống làm mát}.
+		\item \alert{Đường ống dẫn dầu của bộ phận làm mát cưỡng bức} làm bằng \noibat{thép không gỉ}.
+	\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Tài liệu tham khảo
+\section*{Tài liệu tham khảo}
+\begin{frame}{Tài liệu tham khảo}
+\justifying
+\hspace{1cm} \alert{Quy phạm trang bị điện, Phần III --Trang bị phân phối và Trạm biến áp}, Bộ Công Nghiệp -- NXB Lao Động -- Xã Hội, Năm 2006.
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+% Lời cảm ơn
+\section*{Lời cảm ơn}
+\begin{frame}
+\justifying
+\Large \alert{Cảm ơn Thầy và các bạn đã theo dõi phần trình bày của nhóm!}
+\end{frame}
+\end{document}
